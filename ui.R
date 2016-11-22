@@ -11,7 +11,7 @@ shinyUI(fluidPage(
       numericInput("n","Population Size",100,min=1,max=1e5),
       numericInput("nPop","Number of Populations",2,min=1,max=100),
       numericInput("gen","Number of Generations",100,min=1,max=5000),
-      checkboxGroupInput(inputId="plotStats",label="plot:",choices=c("p","He","Hs","Ht","Fis","Fst"),inline=T,selected="p"),
+      checkboxGroupInput(inputId="plotStats",label="plot:",choices=c("p","He","Hs","Ht","Fst"),inline=T,selected="p"),
       div(style="margin-left:40%;",checkboxInput("drift","Drift?",value = T)),
       actionButton("go","go",width="100%"),
       div(helpText("driftR simulates allele and genotype frequencies for a single biallelic locus in biological populations. 
