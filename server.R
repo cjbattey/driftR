@@ -6,13 +6,13 @@ shinyServer(function(input,output,session){
   
   sim.data <- eventReactive(input$go,ignoreNULL = F,{
     validate(
-      need(input$gen<=5000,"Please select < 5000 generations."),
-      need(input$nPop<=100,"Please select < 100 populations"),
-      need(input$n<1000000,"Please select n < 1,000,000"),
+      need(input$gen<5001,"Please select < 5000 generations."),
+      need(input$nPop<101,"Please select < 100 populations"),
+      need(input$n<1000001,"Please select n < 1,000,000"),
       need(input$plotStats!="","Select a variable to plot.")
       )
     runPopSim(gen=input$gen,p=input$p,Waa=input$Waa,Wab=input$Wab,Wbb=input$Wbb,n=input$n,
-              nPop=input$nPop,m=input$m,stats=input$plotStats,drift=input$drift,Uab=input$Uab,Uba=input$Uab)
+              nPop=input$nPop,m=input$m,stats=input$plotStats,infinitePop=input$infinitePop,Uab=input$Uab,Uba=input$Uab)
   })
   
   plot.data <- eventReactive(sim.data(),{
@@ -20,7 +20,7 @@ shinyServer(function(input,output,session){
     })
   
   output$plot <- renderPlot({
-    plotSingleRun(plot.data(),nPop=input$nPop,gen=input$gen)
+    plotSingleRun(plot.data(),nPop=input$nPop,gen=input$gen,legend=input$legend)
   })
   
   nLost.text <- eventReactive(sim.data(),{
@@ -34,6 +34,10 @@ shinyServer(function(input,output,session){
     nLost.text()
   })
   
+  output$endStateTable <- renderTable({
+    endState <- sim.data()[input$gen,c("Fis","Hs","Ht","Fst")]
+  })
+  
   sumTable <- eventReactive(input$runSim,{
     validate(
       need(input$n<=100000,"Please select n <= 100,000")
@@ -41,8 +45,8 @@ shinyServer(function(input,output,session){
     sumTable <- data.frame(matrix(ncol=14))
     withProgress(message="simulating populations...",value=0,{
       for(i in 1:100){
-        df <- runPopSim(gen=100,p=input$p,Waa=input$Waa,Wab=input$Wab,Wbb=input$Wbb,n=input$n,
-                               nPop=2,m=input$m,drift=input$drift,Uab=input$Uab,Uba=input$Uab)
+        df <- runPopSim2(gen=100,p=input$p,Waa=input$Waa,Wab=input$Wab,Wbb=input$Wbb,n=input$n,
+                               nPop=2,m=input$m,infinitePop=input$infinitePop,Uab=input$Uab,Uba=input$Uab)
         names(sumTable) <- names(df)
         sumTable[i,] <- df[nrow(df),]
         incProgress(1/100)
