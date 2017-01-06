@@ -2,14 +2,14 @@ shinyUI(fluidPage(
   titlePanel("driftR: Population Genetic Simulations in R"),
   sidebarLayout(
     sidebarPanel(
-      numericInput("p","Starting allele frequency",value=0.5,min=0,max=1),
+      textInput("p","Starting allele frequency",value="0.5"),
       sliderInput("Uab","Mutation Rate",value=0,min=0,max=0.1),
       sliderInput("Waa","Fitness of genotype AA",value=1,min=0,max=1),
       sliderInput("Wab","Fitness of genotype AB",value=1,min=0,max=1),
       sliderInput("Wbb","Fitness of genotype BB",value=1,min=0,max=1),
       sliderInput("m","Migration Rate",0,min=0,max=0.35),
-      numericInput("n","Population Size",100,min=1,max=1e5),
       numericInput("nPop","Number of Populations",2,min=1,max=100),
+      textInput("n","Population Size",value=100),
       numericInput("gen","Number of Generations",100,min=1,max=5000),
       checkboxInput("infinitePop","Infinite Population (no drift)",value = F),
       checkboxGroupInput(inputId="plotStats",label="plot:",choices=c("p","He","Hs","Ht","Fst"),inline=T,selected="p"),
@@ -20,18 +20,20 @@ shinyUI(fluidPage(
                     Full code available on github: https://github.com/cjbattey/driftR"),style="font-size:75%")
       ),
     
-    mainPanel(
+    mainPanel(style="position:fixed;margin-left:32vw;",
       plotOutput("plot"),
       textOutput("nLost"),
-      tableOutput("endStateTable"),
-      div(style="border-top:1px solid black;"),
-      helpText("Click the button below to run 100, 100-generation simulations of 2 populations using the current 
-               parameters."),
-      actionButton("runSim","Run Replicate Simulations"),
-      tableOutput("meanTable"),
-      tableOutput("varTable"),
-      div(tableOutput("sumTable"), style = "font-size: 75%; width: 75%;")
+      div(style="height:5vh;"),
+      div("Final Generation State:"),
+      tableOutput("endStateTable")
+      # actionButton("continue","Continue Simulation"),
+      # div(style="border-top:1px solid black;"),
+      #helpText("Click the button below to run 100, 100-generation simulations of 2 populations using the current 
+      #         parameters.")
+      #actionButton("runSim","Run Replicate Simulations"),
+      #tableOutput("meanTable"),
+      #tableOutput("varTable"),
+      #div(tableOutput("sumTable"), style = "font-size: 75%; width: 75%;")
     )
     )
-  
 ))

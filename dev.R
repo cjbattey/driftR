@@ -9,14 +9,34 @@ binomialDraw <- function(n,p){
 }
 
 #main simulation function
-runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("p","Fst"),Uab=0,Uba=0,infinitePop=F){
+runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("p","Fst"),Uab=0,Uba=0,
+                      infinitePop=F,continue=F){
+  if(continue==T){ #continue function currently broken... will update when possible. 
+    #allele.freq <- endState
+  } else {
+    allele.freq <- data.frame(matrix(ncol=3*nPop)) #initialize summary stat matrix
+    if(length(p)==nPop){
+      allele.freq[1,(1:nPop)] <- p
+    } else {
+      allele.freq[1,(1:nPop)] <- rep(p,nPop) #starting allele freqs
+    }
+  }
+  
   withProgress(message="simulating populations...",value=0,{
-  allele.freq <- data.frame(matrix(ncol=3*nPop))
-  allele.freq[1,(1:nPop)] <- rep(p,nPop) #starting allele freqs
   for(i in 1:gen){ 
-    mean.p <- as.numeric(rowMeans(allele.freq[i,(1:nPop)]))
+    if(length(n)==nPop){ #weight mean allele freq by relative population size if different
+      ps <- allele.freq[i,(1:nPop)] %>% unlist()
+      mean.p <- mean(ps*(n/sum(n)))
+    } else {
+      mean.p <- as.numeric(rowMeans(allele.freq[i,(1:nPop)]))
+    }
     for(j in 1:nPop){
       p <- allele.freq[i,j]
+      if(length(n)==nPop){ #get population-specific pop size if multiple listed
+        n <- n[j]
+      } else {
+        n <- n
+      }
       p <- (1 - Uab) * p + Uba * (1 - p) #mutation
       p <- p*(1-m)+m*mean.p # migration
       q <- 1-p
@@ -60,6 +80,7 @@ runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("
     } #end populations loop
     incProgress(1/gen)
   } #end generations loop
+  }) #end progress bar
   #summary stats
   names <- c()
   for(i in 1:nPop){names[i]<-paste0("p",i)}
@@ -68,7 +89,7 @@ runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("
   colnames(allele.freq) <- names
   allele.freq$meanHo <- rowMeans(allele.freq[(nPop+1):(nPop*2)])
   allele.freq$meanHe <- rowMeans(allele.freq[(nPop*2+1):(nPop*3)])
-  allele.freq$Fis <- abs(1-(allele.freq$meanHo/allele.freq$meanHe))
+  allele.freq$Fis <- 1-(allele.freq$meanHo/allele.freq$meanHe)
   allele.freq$mean.p <- rowMeans(allele.freq[1:nPop]) 
   allele.freq$Hs <- rowMeans(allele.freq[(nPop*2+1):(nPop*3)])
   allele.freq$Ht <- 2*allele.freq$mean.p*(1 - allele.freq$mean.p)
@@ -76,7 +97,6 @@ runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("
   allele.freq$Fst[allele.freq$Fst<0] <- 0
   allele.freq$gen <- 0:gen
   return(allele.freq)
-  })
 }
 
 #format for plotting
