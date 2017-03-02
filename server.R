@@ -13,7 +13,7 @@ shinyServer(function(input,output,session){
       need((input$nPop==length(p())|length(p())==1),"number of populations must equal number of starting allele frequencies."),
       need(input$gen<5001,"Please select < 5000 generations."),
       need(input$nPop<101,"Please select < 100 populations"),
-      need(input$n<1000001,"Please select n < 1,000,000"),
+      #need(input$n<1000001,"Please select n < 1,000,000"),
       need(input$plotStats!="","Select a variable to plot.")
       )
     tmp <- runPopSim(gen=input$gen,p=p(),Waa=input$Waa,Wab=input$Wab,Wbb=input$Wbb,n=n(),
