@@ -4,13 +4,28 @@ shinyServer(function(input,output,session){
   
   source("./dev.R")
   
-  p <- reactive({as.numeric(unlist(strsplit(input$p,",")))})
-  n <- reactive({as.numeric(unlist(strsplit(input$n,",")))})
+  #if >1 allele freq or pop size are specificed, divide values evenly among across the total input nPop
+  p <- reactive({
+    if(grepl(",| ",input$p)){
+      lapply(as.numeric(unlist(strsplit(input$p,",| "))),
+             function(e) rep(e,input$nPop/length(as.numeric(unlist(strsplit(input$p,",| ")))))) %>% unlist()
+    } else {
+      as.numeric(input$p)
+    }
+    })
+  n <- reactive({
+    if(grepl(",| ",input$n)){
+      lapply(as.numeric(unlist(strsplit(input$n,",| "))),
+             function(e) rep(e,input$nPop/length(as.numeric(unlist(strsplit(input$n,",| ")))))) %>% unlist()
+    } else {
+      as.numeric(input$n)
+    }
+  })
   
   #run single sim
   sim.data <- eventReactive(input$go,ignoreNULL = F,{
     validate(
-      need((input$nPop==length(p())|length(p())==1),"number of populations must equal number of starting allele frequencies."),
+      #need((input$nPop==length(p())|length(p())==1),"number of populations must equal number of starting allele frequencies."),
       need(input$gen<5001,"Please select < 5000 generations."),
       need(input$nPop<101,"Please select < 100 populations"),
       #need(input$n<1000001,"Please select n < 1,000,000"),

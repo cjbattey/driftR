@@ -2,7 +2,7 @@ shinyUI(fluidPage(
   titlePanel("driftR: Population Genetic Simulations in R"),
   sidebarLayout(
     sidebarPanel(
-      textInput("p","Starting allele frequency",value="0.5"),
+      textInput("p","Starting allele frequency A",value="0.5"),
       sliderInput("Uab","Mutation Rate",value=0,min=0,max=0.1),
       sliderInput("Waa","Fitness of genotype AA",value=1,min=0,max=1),
       sliderInput("Wab","Fitness of genotype AB",value=1,min=0,max=1),
@@ -12,7 +12,7 @@ shinyUI(fluidPage(
       textInput("n","Population Size",value=100),
       numericInput("gen","Number of Generations",100,min=1,max=5000),
       checkboxInput("infinitePop","Infinite Population (no drift)",value = F),
-      checkboxGroupInput(inputId="plotStats",label="plot:",choices=c("p","He","Hs","Ht","Fst"),inline=T,selected="p"),
+      checkboxGroupInput(inputId="plotStats",label="plot:",choices=c("p","He","Hs","Ht","Fst","W"),inline=T,selected="p"),
       checkboxInput("legend","Legend",value = F),
       actionButton("go","go",width="100%"),
       div(helpText("driftR simulates allele and genotype frequencies for a single biallelic locus in biological populations. 
