@@ -118,9 +118,9 @@ meltPlotData <- function(allele.freq.df=allele.freq.df,gen=100,nPop=2,stats=c("p
 #plotting function
 plotSingleRun <- function(df,nPop,gen,legend){
   if(legend==T){
-    print(ggplot(df,aes(x=gen,y=value,col=variable))+ylim(0,1)+facet_wrap(~dataType)+geom_line()+xlab("Generations")+ylab(""))
+    print(ggplot(df,aes(x=gen,y=value,col=variable))+ylim(0,1)+facet_wrap(~dataType,scales="free")+geom_line()+xlab("Generations")+ylab(""))
   } else {
-    print(ggplot(df,aes(x=gen,y=value,col=variable))+theme(legend.position="none")+ylim(0,1)+facet_wrap(~dataType)+geom_line()+xlab("Generations")+ylab(""))
+    print(ggplot(df,aes(x=gen,y=value,col=variable))+theme(legend.position="none")+ylim(0,1)+facet_wrap(~dataType,scales="free")+geom_line()+xlab("Generations")+ylab(""))
   }
   
 }
