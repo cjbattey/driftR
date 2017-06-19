@@ -14,7 +14,7 @@ To run locally:
 
 2. install required packages by running the following line: 
 
-  install.packages('shiny');install.packages('plyr');install.packages('reshape');install.packages('ggplot2')
+  install.packages('shiny');install.packages('plyr');install.packages('reshape');install.packages('ggplot2');install.packages('magrittr')
   
 3. load shiny:
 
