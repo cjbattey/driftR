@@ -4,7 +4,7 @@ shinyServer(function(input,output,session){
   
   source("./dev.R")
   
-  #if >1 allele freq or pop size are specificed, divide values evenly among across the total input nPop
+  #if >1 allele freq or pop size are specificed, divide values evenly across the total input nPop
   p <- reactive({
     if(grepl(",| ",input$p)){
       lapply(as.numeric(unlist(strsplit(input$p,",| "))),

@@ -8,15 +8,16 @@ shinyUI(fluidPage(
       sliderInput("Wab","Fitness of genotype AB",value=1,min=0,max=1),
       sliderInput("Wbb","Fitness of genotype BB",value=1,min=0,max=1),
       sliderInput("m","Migration Rate",0,min=0,max=0.35),
-      numericInput("nPop","Number of Populations",2,min=1,max=100),
+      numericInput("nPop","Number of Populations",10,min=1,max=100),
       textInput("n","Population Size",value=100),
       numericInput("gen","Number of Generations",100,min=1,max=5000),
       checkboxInput("infinitePop","Infinite Population (no drift)",value = F),
       checkboxGroupInput(inputId="plotStats",label="plot:",choices=c("p","He","Hs","Ht","Fst","W"),inline=T,selected="p"),
       checkboxInput("legend","Legend",value = F),
       actionButton("go","go",width="100%"),
-      div(helpText("driftR simulates allele and genotype frequencies for a single biallelic locus in biological populations. 
-                    Core functions adapted from the Java program popG (http://evolution.gs.washington.edu/popgen/popg.html). 
+      div(helpText("driftR simulates allele and genotype frequencies for a single biallelic locus in biological populations
+                    under a version of the Wright-Fisher model. 
+                    Core functions were adapted from the Java program popG (http://evolution.gs.washington.edu/popgen/popg.html). 
                     Full code available on github: https://github.com/cjbattey/driftR"),style="font-size:75%")
       ),
     
