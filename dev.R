@@ -119,14 +119,19 @@ meltPlotData <- function(allele.freq.df=allele.freq.df,gen=100,nPop=2,stats=c("p
 plotSingleRun <- function(df,nPop,gen,legend){
   if(legend==T){
     print(ggplot(df,aes(x=gen,y=value,col=variable))+facet_wrap(~dataType,scales="free",ncol=2)+
-            theme_bw()+theme(panel.grid.minor=element_blank())+
-            ylim(0,1)+scale_color_viridis(discrete=T)+
+            theme_bw()+
+            theme(panel.grid.minor=element_blank(),
+                  axis.text=element_text(size=12))+
+            scale_color_viridis(discrete=T)+
             xlab("Generations")+ylab("")+
             geom_line())
   } else {
     print(ggplot(df,aes(x=gen,y=value,col=variable))+facet_wrap(~dataType,scales="free",ncol=2)+
-            theme_bw()+theme(legend.position="none",panel.grid.minor=element_blank())+
-            ylim(0,1)+scale_color_viridis(discrete=T)+
+            theme_bw()+
+            theme(legend.position="none",
+                  panel.grid.minor=element_blank(),
+                  axis.text=element_text(size=12))+
+            scale_color_viridis(discrete=T)+
             xlab("Generations")+ylab("")+
             geom_line())  }
   
