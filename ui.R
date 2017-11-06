@@ -2,39 +2,48 @@ shinyUI(fluidPage(
   titlePanel("driftR: Population Genetic Simulations in R"),
   sidebarLayout(
     sidebarPanel(
-      textInput("p","Starting allele frequency A",value="0.5"),
+      actionButton("go","Run Simulation",width="100%"),
+      br(),br(),
+      textInput("p","Starting allele frequency A",value="0.1, 0.9"),
       sliderInput("Uab","Mutation Rate",value=0,min=0,max=0.1),
       sliderInput("Waa","Fitness of genotype AA",value=1,min=0,max=1),
-      sliderInput("Wab","Fitness of genotype AB",value=1,min=0,max=1),
-      sliderInput("Wbb","Fitness of genotype BB",value=1,min=0,max=1),
-      sliderInput("m","Migration Rate",0,min=0,max=0.35),
+      sliderInput("Wab","Fitness of genotype AB",value=0.95,min=0,max=1),
+      sliderInput("Wbb","Fitness of genotype BB",value=0.90,min=0,max=1),
+      sliderInput("m","Migration Rate",0.01,min=0,max=0.35),
       numericInput("nPop","Number of Populations",10,min=1,max=100),
       textInput("n","Population Size",value=100),
       numericInput("gen","Number of Generations",100,min=1,max=5000),
       checkboxInput("infinitePop","Infinite Population (no drift)",value = F),
       checkboxGroupInput(inputId="plotStats",label="plot:",choices=c("p","He","Hs","Ht","Fst","W"),inline=T,selected="p"),
       checkboxInput("legend","Legend",value = F),
-      actionButton("go","go",width="100%"),
+      # helpText("key:\n
+      #          p: allele frequency of A                          
+      #          He: expected heterozygosity per population        
+      #          Hs: mean heterozygosity within populations      
+      #          Ht: mean heterozygosity across populations         
+      #          Fst: fixation index                                
+      #          W: population mean fitness"),
       div(helpText("driftR simulates allele and genotype frequencies for a single biallelic locus in biological populations
-                    under a version of the Wright-Fisher model. 
-                    Core functions were adapted from the Java program popG (http://evolution.gs.washington.edu/popgen/popg.html). 
-                    Full code available on github: https://github.com/cjbattey/driftR"),style="font-size:75%")
+                    under a Wright-Fisher island model with symmetrical migration. 
+                    Core functions were adapted from the Java version of popG (http://evolution.gs.washington.edu/popgen/popg.html). 
+                    Code available on github: https://github.com/cjbattey/driftR"),style="font-size:75%")
       ),
     
-    mainPanel(style="position:fixed;margin-left:32vw;",
+    mainPanel(#style="position:fixed;margin-left:32vw;",
       plotOutput("plot"),
       textOutput("nLost"),
       div(style="height:5vh;"),
       div("Final Generation State:"),
-      tableOutput("endStateTable")
+      tableOutput("endStateTable"),
       # actionButton("continue","Continue Simulation"),
       # div(style="border-top:1px solid black;"),
-      #helpText("Click the button below to run 100, 100-generation simulations of 2 populations using the current 
-      #         parameters.")
-      #actionButton("runSim","Run Replicate Simulations"),
-      #tableOutput("meanTable"),
-      #tableOutput("varTable"),
-      #div(tableOutput("sumTable"), style = "font-size: 75%; width: 75%;")
+      br(),
+      helpText("Click the button below to run 100, 100-generation simulations of 2 populations using the current 
+               parameters."),
+      actionButton("run_replicates","Run Replicate Simulations"),
+      tableOutput("meanTable"),
+      tableOutput("varTable"),
+      div(tableOutput("sumTable"), style = "font-size: 75%; width: 75%;")
     )
     )
 ))
