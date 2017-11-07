@@ -27,6 +27,8 @@ shinyServer(function(input,output,session){
       as.numeric(input$n)
     }
   })
+  
+  #adjust nPop to be evenly divisible by the number of starting allele frequencies or population sizes.
   nPop <- reactive({
     if(input$nPop%%length(p())!=0){
       input$nPop - input$nPop%%length(p())

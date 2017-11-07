@@ -8,8 +8,8 @@ binomialDraw <- function(n,p){
   return(bnl)
 }
 
-# gen=100;p=0.5;Waa=1;Wab=1;Wbb=1;n=100;nPop=2;m=0;stats=c("p","Fst");Uab=0;Uba=0;
-# infinitePop=F;continue=F
+ # gen=100;p=0.5;Waa=1;Wab=1;Wbb=1;n=100;nPop=2;m=0;stats=c("p","Fst");Uab=0;Uba=0;
+ # infinitePop=F;continue=F
 
 #main simulation function
 runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("p","Fst"),Uab=0,Uba=0,
