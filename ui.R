@@ -38,11 +38,14 @@ shinyUI(fluidPage(
       # actionButton("continue","Continue Simulation"),
       # div(style="border-top:1px solid black;"),
       br(),
-      helpText("Click the button below to run 100, 100-generation simulations of 2 populations using the current 
+      h3("Replicate Runs",style="border-top:1px solid black;"),
+      helpText("Click the button below to run repeated simulations of 2 populations using the current 
                parameters."),
       actionButton("run_replicates","Run Replicate Simulations"),
+      numericInput("nreps","number of runs",value=10),
       tableOutput("meanTable"),
       tableOutput("varTable"),
+      plotOutput("rep_plot"),
       div(tableOutput("sumTable"), style = "font-size: 75%; width: 75%;")
     )
     )

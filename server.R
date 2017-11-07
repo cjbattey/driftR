@@ -88,25 +88,80 @@ shinyServer(function(input,output,session){
     endStateTable()
   })
   
-  sumTable <- eventReactive(input$run_replicates,{
+  ######################## replicate runs for 2-population simulations ###########################
+  n2 <- eventReactive(input$n,{
+    if(grepl(", ",input$n,fixed=T)){
+      as.numeric(unlist(strsplit(input$n,", ")))
+    } else if(grepl(",| ",input$n)){
+      as.numeric(unlist(strsplit(input$n,",| ")))
+    } else {
+      as.numeric(input$n)
+    }
+  })
+  p2 <- reactive({
+    if(grepl(", ",input$p,fixed=T)){
+      as.numeric(unlist(strsplit(input$p,", ")))
+    } else if(grepl(",| ",input$p)){
+      as.numeric(unlist(strsplit(input$p,",| ")))
+    } else {
+      as.numeric(input$p)
+    }
+  })
+  
+  rep_sims <- eventReactive(input$run_replicates,{
     validate(
-      need(input$n<=100000,"Please select n <= 100,000")
+      need(input$n<=100000,"Please select n <= 100,000"),
+      need(input$gen<=200,"Please select gen <=100")
     )
-    sumTable <- data.frame(matrix(ncol=16))
+    rep_sims <- data.frame(matrix(ncol=17))
     withProgress(message="simulating populations...",value=0,{
-      for(i in 1:100){
-        df <- runPopSim2(gen=input$gen,p=p(),Waa=input$Waa,Wab=input$Wab,Wbb=input$Wbb,n=n(),
-                        nPop=2,m=input$m,stats=input$plotStats,infinitePop=input$infinitePop,Uab=input$Uab,Uba=input$Uab,
-                        continue=F)
+      for(i in 1:input$nreps){
+        df <- runPopSim2(gen=input$gen,p=p2(),Waa=input$Waa,Wab=input$Wab,Wbb=input$Wbb,n=n2(),
+                       nPop=2,m=input$m,stats=input$plotStats,infinitePop=input$infinitePop,Uab=input$Uab,Uba=input$Uab,
+                       continue=F)
         #df <- runPopSim2() #for debug
-        names(sumTable) <- names(df)
-        sumTable[i,] <- df[nrow(df),]
-        incProgress(1/100)
+        df$rep <- i
+        names(rep_sims) <- names(df)
+        rep_sims <- rbind(rep_sims,df)
+        incProgress(1/input$nreps)
       }
     })
-    sumTable
+    rep_sims <- subset(rep_sims[-1,],gen!=0)
+    rep_sims
   })
+  
+  rep_plot_data <- eventReactive(rep_sims(),{
+    melt_rep_sims <- melt(rep_sims(),id.vars = c("rep","gen")) 
+    melt_rep_sims$stat <- gsub("[[:digit:]]","",melt_rep_sims$variable)
+    melt_rep_sims <- subset(melt_rep_sims,stat %in% input$plotStats)
+    melt_rep_sims$grp <- factor(paste(melt_rep_sims$rep, melt_rep_sims$variable))
+    melt_rep_sims$rep <- factor(melt_rep_sims$rep)
+    melt_rep_sims
+  })
+  
+  rep_plot <- eventReactive(rep_plot_data(),{
+    print(
+      ggplot(data=rep_plot_data(),
+           aes(x=gen,y=value,group=grp,col=rep))+
+      theme_bw()+
+      theme(panel.grid.minor=element_blank(),
+            axis.text=element_text(size=12),
+            axis.title=element_text(size=12),
+            strip.background = element_blank(),
+            strip.text=element_text(size=12),
+            legend.position = "none")+
+      scale_color_viridis(discrete=T)+
+      facet_wrap(~stat,scales="free",ncol=2)+
+      geom_path()
+    )
+  })
+  
+  output$rep_plot <- renderPlot(rep_plot())
 
+  sumTable <- eventReactive(rep_sims(),{
+    subset(rep_sims(),gen==input$gen)
+  })
+  
   meanTable <- reactive({
     tbl <- colMeans(sumTable(),na.rm=T)
     tbl <- tbl[c("Fis","Hs","Ht","Fst")]
@@ -118,6 +173,14 @@ shinyServer(function(input,output,session){
     tbl <- tbl[c("Fis","Hs","Ht","Fst")]
     t(tbl)
   })
+  
+  plot.data2 <- eventReactive(sim.data(),{
+    meltPlotData(allele.freq.df = sim.data(),gen=input$gen,nPop=nPop(),stats=input$plotStats)
+  })
+  
+  
+  
+  
 
   output$meanTable <- renderTable(meanTable(),colnames = T,digits=4,caption = "Mean state at final generation:",
                               caption.placement = getOption("xtable.caption.placement", "top"),
@@ -130,4 +193,5 @@ shinyServer(function(input,output,session){
   output$sumTable <- renderTable(sumTable(),caption = "Final Generation States:",
                                  caption.placement = getOption("xtable.caption.placement", "top"),
                                  caption.width = getOption("xtable.caption.width", NULL))
+  
 })
