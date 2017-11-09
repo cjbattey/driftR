@@ -12,7 +12,7 @@ To run locally:
 
 1. install R (https://www.r-project.org/) and rstudio (https://www.rstudio.com/products/rstudio/download/#download), and open RStudio
 
-2. (In RStudio) copy/paste the following code block into the terminal (bottom left window): 
+2. (In RStudio) copy/paste the following code block into the console (bottom left window): 
 
         pkgs <- c("plyr","reshape","ggplot2","magrittr","viridis")
         dl_pkgs <- subset(pkgs,!pkgs %in% rownames(installed.packages()))
