@@ -14,11 +14,11 @@ To run locally:
 
 2. (In RStudio) copy/paste the following code block into the console (bottom left window): 
 
-    pkgs <- c("plyr","reshape","ggplot2","magrittr","viridis")
-    dl_pkgs <- subset(pkgs,!pkgs %in% rownames(installed.packages()))
-    if(length(dl_pkgs)!=0){
-      for(i in dl_pkgs) install.packages(i)
-    }
-    library(shiny)
-    runGitHub(username="cjbattey",repo="driftR")
+        pkgs <- c("plyr","reshape","ggplot2","magrittr","viridis")
+        dl_pkgs <- subset(pkgs,!pkgs %in% rownames(installed.packages()))
+        if(length(dl_pkgs)!=0){
+          for(i in dl_pkgs) install.packages(i)
+        }
+        library(shiny)
+        runGitHub(username="cjbattey",repo="driftR")
 
