@@ -19,7 +19,6 @@ To run locally:
         if(length(dl_pkgs)!=0){
           for(i in dl_pkgs) install.packages(i)
         }
-        library(plyr);library(reshape);library(ggplot2);library(magrittr);library(viridis)
         library(shiny)
         runGitHub(username="cjbattey",repo="driftR")
 
