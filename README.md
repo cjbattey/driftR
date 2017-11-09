@@ -10,9 +10,9 @@ cite driftR! <a href="https://zenodo.org/badge/latestdoi/74150401"><img src="htt
 
 To run locally: 
 
-1. install R (https://www.r-project.org/) and rstudio (https://www.rstudio.com/products/rstudio/download/#download), and open RStudio
+1. Install R (https://www.r-project.org/). Optionally, install rstudio (https://www.rstudio.com/products/rstudio/download/).
 
-2. (In RStudio) copy/paste the following code block into the console (bottom left window): 
+2. Paste the following code block into an R console: 
 
         pkgs <- c("plyr","reshape","ggplot2","magrittr","viridis")
         dl_pkgs <- subset(pkgs,!pkgs %in% rownames(installed.packages()))
