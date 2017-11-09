@@ -24,7 +24,7 @@ shinyUI(fluidPage(
       #          Fst: fixation index                                
       #          W: population mean fitness"),
       div(helpText("driftR simulates allele and genotype frequencies for a single biallelic locus in biological populations
-                    under a Wright-Fisher island model with symmetrical migration. 
+                    under a Wright-Fisher island model with symmetrical migration between all populations (weighted by population size). 
                     Core functions were adapted from the Java version of popG (http://evolution.gs.washington.edu/popgen/popg.html). 
                     Code available on github: https://github.com/cjbattey/driftR"),style="font-size:75%")
       ),
@@ -40,9 +40,9 @@ shinyUI(fluidPage(
       br(),
       h3("Replicate Runs",style="border-top:1px solid black;"),
       helpText("Click the button below to run repeated simulations of 2 populations using the current 
-               parameters."),
+               parameters (useful for estimating variance)."),
       actionButton("run_replicates","Run Replicate Simulations"),
-      numericInput("nreps","number of runs",value=10),
+      numericInput("nreps","number of replicates",value=10),
       tableOutput("meanTable"),
       tableOutput("varTable"),
       plotOutput("rep_plot"),

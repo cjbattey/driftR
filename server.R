@@ -110,7 +110,7 @@ shinyServer(function(input,output,session){
   
   rep_sims <- eventReactive(input$run_replicates,{
     validate(
-      need(input$n<=100000,"Please select n <= 100,000"),
+      need(n2()<=10000,"Please select n <= 10,000"),
       need(input$gen<=200,"Please select gen <=100")
     )
     rep_sims <- data.frame(matrix(ncol=17))
@@ -164,13 +164,15 @@ shinyServer(function(input,output,session){
   
   meanTable <- reactive({
     tbl <- colMeans(sumTable(),na.rm=T)
-    tbl <- tbl[c("Fis","Hs","Ht","Fst")]
+    tbl <- tbl[c("mean.p","Fis","Hs","Ht","Fst")]
+    names(tbl) <- c("p","Fis","Hs","Ht","Fst")
     t(tbl)
   })
 
   varTable <- reactive({
     tbl <- apply(sumTable(),2,function(e) var(e,na.rm=T))
-    tbl <- tbl[c("Fis","Hs","Ht","Fst")]
+    tbl <- tbl[c("mean.p","Fis","Hs","Ht","Fst")]
+    names(tbl) <- c("p","Fis","Hs","Ht","Fst")
     t(tbl)
   })
   
