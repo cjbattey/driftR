@@ -27,6 +27,6 @@ The software simulates change in allele frequency across multiple populations un
 
 For each generation and each population, the simulation (1) adjusts allele frequencies for mutation and migration, (2) calculates genotype frequencies after selection, and (3) simulates genetic drift by drawing the genotype counts for each successive generation from a binomial distribution with a "success" cutoff equal to the genotype frequency in the preceding generation. DriftR stores allele frequencies and summary statistics (He, Ho, Fst, Fis) each generation, then plots the result using the faceting features of the R package "ggplot2". 
 
-driftR was written by CJ Battey. 
+driftR was written by CJ Battey and is free for educational and other use under the Gnu General Public License (https://www.gnu.org/licenses/quick-guide-gplv3.html). 
 
 citation: <a href="https://zenodo.org/badge/latestdoi/74150401"><img src="https://zenodo.org/badge/74150401.svg" alt="DOI"></a>
