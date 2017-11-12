@@ -9,7 +9,7 @@ shinyUI(fluidPage(
       sliderInput("Waa","Fitness of genotype AA",value=1,min=0,max=1),
       sliderInput("Wab","Fitness of genotype AB",value=0.95,min=0,max=1),
       sliderInput("Wbb","Fitness of genotype BB",value=0.90,min=0,max=1),
-      sliderInput("m","Migration Rate",0.01,min=0,max=0.35),
+      sliderInput("m","Migration Rate",0.01,min=0,max=0.2),
       numericInput("nPop","Number of Populations",10,min=1,max=100),
       textInput("n","Population Size",value=100),
       numericInput("gen","Number of Generations",100,min=1,max=5000),

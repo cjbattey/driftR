@@ -1,13 +1,6 @@
 #development script for popgen simulations (+/- R translation of PopG, adding more visualization and summary stats)
 library(plyr);library(reshape);library(ggplot2);library(magrittr);library(viridis)
 
-#binomial draw for new genotype frequencies
-binomialDraw <- function(n,p){ 
-  draws <- runif(n)
-  bnl <- length(draws[draws<p])
-  return(bnl)
-}
-
  # gen=100;p=0.5;Waa=1;Wab=1;Wbb=1;n=100;nPop=2;m=0;stats=c("p","Fst");Uab=0;Uba=0;
  # infinitePop=F;continue=F
 
@@ -17,7 +10,7 @@ runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("
   if(continue==T){ #continue function currently broken... will update when possible. 
     #allele.freq <- endState
   } else {
-    allele.freq <- data.frame(matrix(ncol=4*nPop)) #initialize summary stat matrix
+    allele.freq <- data.frame(matrix(ncol=4*nPop,nrow=gen)) #initialize summary stat matrix
     if(length(p)>1){
       allele.freq[1,(1:nPop)] <- p
     } else {
@@ -48,9 +41,11 @@ runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("
         freq.aa <- (p*p*Waa)/w #post-selection genotype frequencies (weighted by relative fitness)
         freq.ab <- (2*p*q*Wab)/w
         if(infinitePop==F){ 
-            Naa <- binomialDraw(n2,freq.aa) #binomial draw for new genotype counts (drift)
+            Naa <- rbinom(1,n2,freq.aa)
+            #Naa <- binomialDraw(n2,freq.aa) #binomial draw for new genotype counts (drift)
           if(freq.aa<1){ 
-            Nab <- binomialDraw((n2-Naa),(freq.ab/(1-freq.aa)))
+            Nab <- rbinom(1,(n2-Naa),(freq.ab/(1-freq.aa)))
+            #Nab <- binomialDraw((n2-Naa),(freq.ab/(1-freq.aa)))
           }
           else {
             Nab <- 0
@@ -150,7 +145,7 @@ runPopSim2 <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c(
   if(continue==T){ #continue function currently broken... will update when possible. 
     #allele.freq <- endState
   } else {
-    allele.freq <- data.frame(matrix(ncol=4*nPop)) #initialize summary stat matrix
+    allele.freq <- data.frame(matrix(ncol=4*nPop),nrow=gen) #initialize summary stat matrix
     if(length(p)>1){
       allele.freq[1,(1:nPop)] <- p
     } else {
@@ -179,9 +174,11 @@ runPopSim2 <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c(
           freq.aa <- (p*p*Waa)/w #post-selection genotype frequencies (weighted by relative fitness)
           freq.ab <- (2*p*q*Wab)/w
           if(infinitePop==F){ 
-            Naa <- binomialDraw(n2,freq.aa) #binomial draw for new genotype counts (drift)
+            Naa <- rbinom(1,n2,freq.aa)
+            #Naa <- binomialDraw(n2,freq.aa) #binomial draw for new genotype counts (drift)
             if(freq.aa<1){ 
-              Nab <- binomialDraw((n2-Naa),(freq.ab/(1-freq.aa)))
+              Nab <- rbinom(1,(n2-Naa),(freq.ab/(1-freq.aa)))
+              #Nab <- binomialDraw((n2-Naa),(freq.ab/(1-freq.aa)))
             }
             else {
               Nab <- 0
