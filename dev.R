@@ -95,8 +95,8 @@ runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("
   allele.freq$Ht <- 2*allele.freq$mean.p*(1 - allele.freq$mean.p)
   allele.freq$Fst <- (allele.freq$Ht-allele.freq$Hs)/allele.freq$Ht
   allele.freq$Fst[allele.freq$Fst<0] <- 0
-  allele.freq$Fst[is.na(allele.freq$Fst) & allele.freq$gen!=1] <- 0
   allele.freq$gen <- 0:gen
+  allele.freq$Fst[allele.freq$gen == 0] <- NA
   return(allele.freq)
 }
 
@@ -224,7 +224,7 @@ runPopSim2 <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c(
   allele.freq$Ht <- 2*allele.freq$mean.p*(1 - allele.freq$mean.p)
   allele.freq$Fst <- (allele.freq$Ht-allele.freq$Hs)/allele.freq$Ht
   allele.freq$Fst[allele.freq$Fst<0] <- 0
-  allele.freq$Fst[is.na(allele.freq$Fst)] <- 0
   allele.freq$gen <- 0:gen
+  allele.freq$Fst[allele.freq$gen == 0] <- NA
   return(allele.freq)
 }

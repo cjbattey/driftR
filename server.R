@@ -126,7 +126,7 @@ shinyServer(function(input,output,session){
         incProgress(1/input$nreps)
       }
     })
-    rep_sims <- subset(rep_sims[-1,],gen!=0)
+    #rep_sims <- subset(rep_sims[-1,],gen!=0)
     rep_sims
   })
   
