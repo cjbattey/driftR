@@ -16,6 +16,7 @@ shinyUI(fluidPage(
       checkboxInput("infinitePop","Infinite Population (no drift)",value = F),
       checkboxGroupInput(inputId="plotStats",label="plot:",choices=c("p","He","Hs","Ht","Fst","W"),inline=T,selected="p"),
       checkboxInput("legend","Legend",value = F),
+      checkboxInput("free_y", "Scale Y axis to data",value=F),
       # helpText("key:\n
       #          p: allele frequency of A                          
       #          He: expected heterozygosity per population        

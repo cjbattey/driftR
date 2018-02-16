@@ -28,6 +28,8 @@ shinyServer(function(input,output,session){
     }
   })
   
+  scales <- reactive({if(input$free_y==T){"free_y"} else {"fixed"}})
+  
   #adjust nPop to be evenly divisible by the number of starting allele frequencies or population sizes.
   nPop <- reactive({
     if(input$nPop%%length(p())!=0){
@@ -64,7 +66,7 @@ shinyServer(function(input,output,session){
     })
   
   output$plot <- renderPlot({
-    plotSingleRun(plot.data(),nPop=nPop(),gen=input$gen,legend=input$legend)
+    plotSingleRun(plot.data(),nPop=nPop(),gen=input$gen,legend=input$legend,scales=scales())
   })
   
   nLost.text <- eventReactive(sim.data(),{
@@ -140,6 +142,7 @@ shinyServer(function(input,output,session){
   })
   
   rep_plot <- eventReactive(rep_plot_data(),{
+    if(scales()=="free_y"){
     print(
       ggplot(data=rep_plot_data(),
            aes(x=gen,y=value,group=grp,col=rep))+
@@ -151,9 +154,23 @@ shinyServer(function(input,output,session){
             strip.text=element_text(size=12),
             legend.position = "none")+
       scale_color_viridis(discrete=T)+
-      facet_wrap(~stat,scales="free",ncol=2)+
+      facet_wrap(~stat,scales=scales(),ncol=2)+
       geom_path()
-    )
+    )} else if(scales()=="fixed"){
+      print(
+        ggplot(data=rep_plot_data(),
+               aes(x=gen,y=value,group=grp,col=rep))+
+          theme_bw()+ylim(0,1)+
+          theme(panel.grid.minor=element_blank(),
+                axis.text=element_text(size=12),
+                axis.title=element_text(size=12),
+                strip.background = element_blank(),
+                strip.text=element_text(size=12),
+                legend.position = "none")+
+          scale_color_viridis(discrete=T)+
+          facet_wrap(~stat,scales=scales(),ncol=2)+
+          geom_path()
+      )}
   })
   
   output$rep_plot <- renderPlot(rep_plot())

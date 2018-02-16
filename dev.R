@@ -110,9 +110,20 @@ meltPlotData <- function(allele.freq.df=allele.freq.df,gen=100,nPop=2,stats=c("p
 }
 
 #plotting function
-plotSingleRun <- function(df,nPop,gen,legend){
-  if(legend==T){
-    print(ggplot(df,aes(x=gen,y=value,col=variable))+facet_wrap(~dataType,scales="free",ncol=2)+
+plotSingleRun <- function(df,nPop,gen,legend,scales){
+  if(legend==T & scales=="fixed"){
+    print(ggplot(df,aes(x=gen,y=value,col=variable))+facet_wrap(~dataType,scales=scales,ncol=2)+
+            theme_bw()+ylim(0,1)+
+            theme(panel.grid.minor=element_blank(),
+                  axis.text=element_text(size=12),
+                  axis.title=element_text(size=12),
+                  strip.background = element_blank(),
+                  strip.text=element_text(size=12))+
+            scale_color_viridis(discrete=T)+
+            xlab("Generations")+ylab("")+
+            geom_line())
+  } else if (legend==T & scales=="free_y"){
+    print(ggplot(df,aes(x=gen,y=value,col=variable))+facet_wrap(~dataType,scales=scales,ncol=2)+
             theme_bw()+
             theme(panel.grid.minor=element_blank(),
                   axis.text=element_text(size=12),
@@ -122,8 +133,20 @@ plotSingleRun <- function(df,nPop,gen,legend){
             scale_color_viridis(discrete=T)+
             xlab("Generations")+ylab("")+
             geom_line())
-  } else {
-    print(ggplot(df,aes(x=gen,y=value,col=variable))+facet_wrap(~dataType,scales="free",ncol=2)+
+  } else if (legend==F & scales=="fixed"){
+    print(ggplot(df,aes(x=gen,y=value,col=variable))+facet_wrap(~dataType,scales=scales,ncol=2)+
+            theme_bw()+ylim(0,1)+
+            theme(legend.position="none",
+                  panel.grid.minor=element_blank(),
+                  axis.text=element_text(size=12),
+                  axis.title=element_text(size=12),
+                  strip.background = element_blank(),
+                  strip.text=element_text(size=12))+
+            scale_color_viridis(discrete=T)+
+            xlab("Generations")+ylab("")+
+            geom_line())
+  } else if (legend==F & scales=="free_y") {
+    print(ggplot(df,aes(x=gen,y=value,col=variable))+facet_wrap(~dataType,scales=scales,ncol=2)+
             theme_bw()+
             theme(legend.position="none",
                   panel.grid.minor=element_blank(),
