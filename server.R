@@ -43,7 +43,7 @@ shinyServer(function(input,output,session){
       #need((input$nPop==length(p())|length(p())==1),"number of populations must equal number of starting allele frequencies."),
       need(input$gen<1001,"Please select < 1001 generations."),
       need(input$nPop<101,"Please select < 101 populations"),
-      need(input$n<=100000,"Please select n <= 100,000"),
+      #need(n()<=100000,"Please select n <= 100,000"),
       need(input$plotStats!="","Select a variable to plot.")
       )
     tmp <- runPopSim(gen=input$gen,p=p(),Waa=input$Waa,Wab=input$Wab,Wbb=input$Wbb,n=n(),
@@ -110,7 +110,7 @@ shinyServer(function(input,output,session){
   
   rep_sims <- eventReactive(input$run_replicates,{
     validate(
-      need(n2()<=10000,"Please select n <= 10,000"),
+      #need(n2()<=10000,"Please select n <= 10,000"),
       need(input$gen<=200,"Please select gen <=100")
     )
     rep_sims <- data.frame(matrix(ncol=17))
