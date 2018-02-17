@@ -24,7 +24,7 @@ runPopSim <- function(gen=100,p=0.5,Waa=1,Wab=1,Wbb=1,n=100,nPop=2,m=0,stats=c("
       ps <- allele.freq[i,(1:nPop)] %>% unlist()
       mean.p <- weighted.mean(ps,n)
     } else {
-      mean.p <- as.numeric(rowMeans(allele.freq[i,(1:nPop)]))
+      mean.p <- as.numeric(rowMeans(data.frame(allele.freq[i,(1:nPop)])))
     }
     for(j in 1:nPop){
       p <- allele.freq[i,j]
